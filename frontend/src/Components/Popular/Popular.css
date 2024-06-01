@@ -1,0 +1,41 @@
+.popular{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 100px;
+   
+
+}
+
+
+.popular h1{
+    font-size: 50px;
+    font-weight: 600;
+    color: #171717;
+}
+
+
+.popular hr{
+    width: 200px;
+    height: 6px;
+    border-radius: 10px;
+    background: #252525;
+}
+
+.popular-item {
+    display: flex;
+    margin-top: 50px;
+ 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.popular-item > *:first-child {
+    margin-left: 30px; /* Supprime la marge à gauche du premier élément */
+}
+
+.popular-item > *:last-child {
+    margin-right: 20px; /* Supprime la marge à droite du dernier élément */
+}

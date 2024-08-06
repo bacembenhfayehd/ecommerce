@@ -1,14 +1,16 @@
-import React, { createContext } from 'react';
-import all_product from '../Components/Assets/all_product';
+import React, { createContext, useEffect } from 'react';
+
 import { useState } from 'react';
 
 
 
 export const ShopContext = createContext(null);
 
+
+
 const getDefaultCart = () => {
   let cart = {};
-  for (let index = 0; index < all_product.length + 1; index++) {
+  for (let index = 0; index <= 300+1; index++) {
     cart[index] = 0;
   }
   return cart;
@@ -16,6 +18,20 @@ const getDefaultCart = () => {
 
 const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState(getDefaultCart());
+  const [allProducts,setAll_Product] = useState([]);
+
+
+  useEffect(() => {
+    fetch('http://localhost:4000/allproducts')
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Fetched products:', data);
+        setAll_Product(data);
+      })
+      .catch((error) => console.error('Error fetching products:', error));
+  }, []);
+
+  
 
   const addToCart = (itemId) => {
     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
@@ -35,7 +51,7 @@ const ShopContextProvider = (props) => {
     {
       if (cartItems[item]>0)
       {
-        let itemInfo = all_product.find((product)=> product.id===Number(item))
+        let itemInfo = allProducts.find((product)=> product.id===Number(item))
         totalAmount += itemInfo.new_price * cartItems[item];
       }
       
@@ -56,7 +72,7 @@ const ShopContextProvider = (props) => {
     return totalItem;
   }
 
-  const contextValue = {getTotalCartItems,getTotalCartAmount,all_product, cartItems, addToCart, removeFromCart };
+  const contextValue = {getTotalCartItems,getTotalCartAmount,allProducts, cartItems, addToCart, removeFromCart };
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}

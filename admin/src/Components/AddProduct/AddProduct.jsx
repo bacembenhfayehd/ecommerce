@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import upload_area from '../../assets/upload_area.svg'
 import './AddProduct.css'
 
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const AddProduct = () => {
 
 
@@ -57,7 +61,11 @@ const AddProduct = () => {
                 },
                 body:JSON.stringify(product),
              }).then((resp)=> resp.json()).then((data) => {
-                data.success?alert('product added'):alert('failed! try again ');
+                if(data.success){
+                    toast.success('Product added successfully!');
+                }else{
+                    toast.error('Failed to add product, please try again.');
+                }
              })
          }
 
@@ -99,6 +107,7 @@ const AddProduct = () => {
 
     </div>
     <button onClick={() => {addproduct()}} className='addproduct-btn'>ADD</button>
+    <ToastContainer />
         </div>
   )
 }

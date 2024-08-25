@@ -5,16 +5,13 @@
     gap: 10px;
     margin-bottom: 100px;
    
-
 }
-
 
 .new-collections h1{
     font-size: 50px;
     font-weight: 600;
     color: #171717;
 }
-
 
 .new-collections hr{
     width: 200px;
@@ -27,7 +24,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     margin-top: 50px;
-    gap: 3px;  
+    gap: 20px;  
 }
 
 

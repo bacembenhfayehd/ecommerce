@@ -7,7 +7,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -107,14 +106,14 @@ app.post('/addproduct', async (req, res) => {
     }
 });
 
-app.post('/removeproduct', async (req, res) => {
+app.post('/deletePdt', async (req, res) => {
     try {
-        const result = await Product.findOneAndDelete({ id: req.body.id });
+        const result = await Product.findOneAndDelete({ _id: req.body.id });
         if (result) {
             console.log('Removed');
             res.json({
                 success: true,
-                name: req.body.name
+                name: result.name
             });
         } else {
             res.status(404).json({ error: 'Product not found' });
@@ -205,6 +204,106 @@ app.post('/login', async (req,res) => {
         res.json({success:false, error:'wrong email id '})
     }
 })
+
+
+app.get('/newcollection' , async (req,res) => {
+
+    const products = await Product.find({});
+
+    let newCollection = products.slice(1).slice(-4);
+    console.log('new collection fetched');
+    res.send(newCollection);
+})
+
+
+app.get('/popularWomen' , async (req,res) => {
+
+    let popular = await Product.find({category:'women'});
+    let popular_women = popular.slice(0,4);
+    console.log('popular in women');
+    res.send(popular_women);
+})
+
+
+// middleware pour nlawjou 3al user a partir de la base de donnés ( cas de nizar , yelzem ykoun authentifié bech ynajem ya3ml des actions dans l'applicayion)
+
+const fetchUser = async (req, res, next) => {
+    const token = req.header('auth-token');
+    if (!token) {
+        return res.status(401).json({ error: 'No token, authorization denied' });
+    }
+    try {
+        const decoded = jwt.verify(token, 'secret ecomm');
+        req.user = decoded.user;
+        next();
+    } catch (error) {
+        res.status(401).json({ error: 'Token is not valid' });
+    }
+};
+
+
+app.post('/addCart', fetchUser, async (req, res) => {
+    try {
+        let userData = await Users.findOne({ _id: req.user.id });
+        if (!userData) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // yelzem el panier ykoun mawjoud fel les propriétés mte3 el user  fel db
+        if (!userData.cartData) {
+            userData.cartData = {};
+        }
+        userData.cartData[req.body.itemId] = (userData.cartData[req.body.itemId] || 0) + 1;
+
+        await Users.findByIdAndUpdate(req.user.id, { cartData: userData.cartData });
+
+        res.json({ message: 'Added' }); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+app.post('/removeCart', fetchUser, async (req, res) => {
+    try {
+        let userData = await Users.findOne({ _id: req.user.id });
+        if (!userData) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        //yelzem el panier ykoun mawjoud fel les propriétés mte3 el user  fel db
+        if (!userData.cartData) {
+            userData.cartData = {};
+        }
+
+        // na9sou fel quantité mte3 lproduit
+        if (userData.cartData[req.body.itemId]) {
+            userData.cartData[req.body.itemId] -= 1;
+            
+            // nfas5ou le produit mel panier si la quantité est zéro ou moins
+            if (userData.cartData[req.body.itemId] <= 0) {
+                delete userData.cartData[req.body.itemId];
+            }
+
+            await Users.findByIdAndUpdate(req.user.id, { cartData: userData.cartData });
+        }
+
+        res.json({ message: 'Removed' }); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
+app.post('/getcartData' ,fetchUser, async (req,res) => {
+
+    console.log('GetCart');
+    let userData = await Users.findOne({_id:req.user.id})
+    res.json(userData.cartData);
+})
+
+
 
 app.listen(PORT, (error) => {
     if (!error) {

@@ -10,7 +10,7 @@ const Footer = () => {
     <div className='footer'>
         <div className="footer-logo">
            
-            <p>Ginal</p>
+            <p>Ready</p>
         </div>
         <ul className='footer-links'>
             <li>Company</li>

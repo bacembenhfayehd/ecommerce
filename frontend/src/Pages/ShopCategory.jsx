@@ -40,7 +40,7 @@ const ShopCategory = (props) => {
             return (
               <Item
                 key={item._id}
-                id={item._id}
+                _id={item._id}
                 name={item.name}
                 image={item.image}
                 new_price={item.new_price}

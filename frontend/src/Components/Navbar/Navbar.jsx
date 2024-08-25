@@ -21,7 +21,7 @@ const Navbar = () => {
         <div className='navbar'>
             <div className="nav-logo">
                 
-                <p>Ginal</p>
+                <p>Ready</p>
             </div>
             <ul className="nav-menu">
             <li onClick={() => {setMenu("shop")}}><Link style={{textDecoration:'none' , color:'black'}}to='/'>Shop</Link>{menu==="shop"?<hr/>:<></>}</li>

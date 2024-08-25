@@ -6,7 +6,7 @@ import remove_icon from "../Assets/cart_cross_icon.png";
 import { ShopContext } from "../../Context/ShopContext";
 
 const CartItems = () => {
-  const { getTotalCartAmount, all_product, cartItems, removeFromCart } =
+  const { getTotalCartAmount, allProducts, cartItems, removeFromCart } =
     useContext(ShopContext);
   return (
     <div className="cartitems">
@@ -19,23 +19,23 @@ const CartItems = () => {
         <p>Remove</p>
       </div>
       <hr />
-      {all_product.map((e) => {
-        if (cartItems[e.id] > 0) {
+      {allProducts.map((e) => {
+        if (cartItems[e._id] > 0) {
           return (
-            <div>
+            <div key={e._id}>
               <div className="cartitems-format cartitems-format-main">
                 <img src={e.image} alt="" className="carticon-product-icon" />
                 <p>{e.name}</p>
                 <p>${e.new_price}</p>
                 <button className="cartitems-quantity">
-                  {cartItems[e.id]}
+                  {cartItems[e._id]}
                 </button>
-                <p>${e.old_price * cartItems[e.id]}</p>
+                <p>${e.new_price * cartItems[e._id]}</p>
                 <img
                   className="cartitems-remove-icon"
                   src={remove_icon}
                   onClick={() => {
-                    removeFromCart(e.id);
+                    removeFromCart(e._id);
                   }}
                   alt=""
                 />
@@ -66,15 +66,9 @@ const CartItems = () => {
               <h3>${getTotalCartAmount()}</h3>
             </div>
           </div>
-          <button>PROCEED TO CHECKOUT</button>
+          <button>Confirm your order</button>
         </div>
-        <div className="cartitems-promocode">
-          <p>If you have a promo code, Enter it here</p>
-          <div className="cartitems-promobox">
-            <input type="text" placeholder="promocode" />
-            <button>submit</button>
-          </div>
-        </div>
+        
       </div>
     </div>
   );

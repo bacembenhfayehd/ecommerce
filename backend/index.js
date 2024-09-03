@@ -15,6 +15,13 @@ mongoose.connect('mongodb+srv://bacem:GOMYCODE2024@cluster0.bumvmfi.mongodb.net/
   .then(() => console.log('Database is connected'))
   .catch(err => console.log('Database connection error:', err));
 
+  app.use(express.static(path.join(__dirname, 'frontend/build')));
+
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
+
 app.get('/', (req, res) => {
     res.send('Express app is running');
 });

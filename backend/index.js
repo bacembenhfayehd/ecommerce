@@ -11,16 +11,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-mongoose.connect('mongodb+srv://bacem:GOMYCODE2024@cluster0.bumvmfi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+mongoose.connect('mongodb+srv://bacem:NC4RqVnkO6Z7uKeE@cluster0.bumvmfi.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('Database is connected'))
   .catch(err => console.log('Database connection error:', err));
 
-  app.use(express.static(path.join(__dirname, 'frontend/build')));
 
-// Anything that doesn't match the above, send back index.html
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-});
+
+
+
 
 app.get('/', (req, res) => {
     res.send('Express app is running');

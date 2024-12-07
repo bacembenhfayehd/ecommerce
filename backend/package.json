@@ -4,9 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev":"node backend/index.js",
-    "build": "npm install && npm install --prefix frontend && npm build --prefix frontend"
-
+    "dev": "node index.js"
+    
   },
   "author": "",
   "license": "ISC",
